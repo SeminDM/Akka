@@ -11,11 +11,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DeliveryService">
-      <HintPath>..\..\DeliveryService\DeliveryService\bin\Debug\netstandard2.0\DeliveryService.dll</HintPath>
+    <Reference Include="DeliveryActors">
+      <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.1\DeliveryActors.dll</HintPath>
     </Reference>
-    <Reference Include="NotificationService">
-      <HintPath>..\..\NotificationService\NotificationService\bin\Debug\netstandard2.0\NotificationService.dll</HintPath>
+    <Reference Include="DeliveryApi">
+      <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.1\DeliveryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="NotificationActors">
+      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.1\NotificationActors.dll</HintPath>
+    </Reference>
+    <Reference Include="NotificationApi">
+      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.1\NotificationApi.dll</HintPath>
     </Reference>
   </ItemGroup>
 
