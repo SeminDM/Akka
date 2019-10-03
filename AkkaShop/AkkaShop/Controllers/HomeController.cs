@@ -6,6 +6,8 @@ using AkkaShop.Models;
 using Akka.Actor;
 using NotificationApi;
 using DeliveryApi;
+using AkkaShop.Hubs;
+using AkkaShop.Core;
 
 namespace AkkaShop.Controllers
 {
@@ -54,14 +56,53 @@ namespace AkkaShop.Controllers
         {
             var rand = new Random();
             var randomNumber = rand.Next(1, 1000);
+            
+            goods = $"some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}, " +
+               $"some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}";
 
+            NotifyHub notifyHub = new NotifyHub();
+
+            DeliveryHub deliverHub = new DeliveryHub();
+            Deliver deliver = new Deliver();
+
+            deliver.SetActor(_deliveryActor);
+            deliver.SetGood(goods);
+
+            deliverHub.SetDeliver(deliver);
+
+            
             // notify about delivery start
             var startDeliveryNotification = new DeliveryStartNotification
             {
                 ShipId = randomNumber.ToString(),
                 TransportType = (NotificationApi.TransportType)(randomNumber % 4)
             };
+            var goodsArray = goods.Split(',');
 
+            foreach (var good in goodsArray)
+            {
+                var rn = rand.Next(1, 1000);
+                var tempDeliveryData = new DeliveryData
+                {
+                    Goods = new string[] { good },
+                    ShipId = rn.ToString(),
+                    TransportType = (DeliveryApi.TransportType)(rn % 4)
+                };
+
+                var msg = $"Goods will be delivered by {tempDeliveryData.TransportType} {tempDeliveryData.ShipId}";
+
+                var result1 = await deliver.StartDeliveryOneGood(tempDeliveryData);
+                msg = result1.IsSuccess
+               ? $"Your goods are delivered to {result1.Address} successfully"
+               : $"Delivery of your goods was failed";
+                notifyHub.SendMessage();
+            }
+
+
+
+
+
+            //TODO notify by signalr with actors
             _notificationActor.Tell(startDeliveryNotification);
 
             // deliver goods

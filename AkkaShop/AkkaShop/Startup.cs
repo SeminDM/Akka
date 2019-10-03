@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using AkkaShop.Hubs;
 using DeliveryActors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,8 @@ namespace AkkaShop
                 var deliveryActor = actorSystem.ActorOf<DeliveryActor>("DeliveryActor");
                 return () => deliveryActor;
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +72,12 @@ namespace AkkaShop
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<DeliveryHub>("/deliveryGoods");
+                routes.MapHub<NotifyHub>("/notify");
             });
 
             applicationLifetime.ApplicationStarted.Register(() =>
