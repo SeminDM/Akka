@@ -7,7 +7,6 @@ using Akka.Actor;
 using NotificationApi;
 using DeliveryApi;
 using AkkaShop.Hubs;
-using AkkaShop.Core;
 
 namespace AkkaShop.Controllers
 {
@@ -52,78 +51,48 @@ namespace AkkaShop.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> DeliverAsync(string goods)
+        public async Task DeliverAsync(string goods)
         {
             var rand = new Random();
-            var randomNumber = rand.Next(1, 1000);
-            
-            goods = $"some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}, " +
-               $"some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}, some good {rand.Next(-100, 100)}";
 
-            NotifyHub notifyHub = new NotifyHub();
+            goods = "Coffee,Tea,Juice,Pepsi,Fanta";
 
             DeliveryHub deliverHub = new DeliveryHub();
-            Deliver deliver = new Deliver();
 
-            deliver.SetActor(_deliveryActor);
-            deliver.SetGood(goods);
-
-            deliverHub.SetDeliver(deliver);
-
-            
-            // notify about delivery start
-            var startDeliveryNotification = new DeliveryStartNotification
+            foreach (var good in goods.Split(','))
             {
-                ShipId = randomNumber.ToString(),
-                TransportType = (NotificationApi.TransportType)(randomNumber % 4)
-            };
-            var goodsArray = goods.Split(',');
+                var randomNumber = rand.Next(1, 1000);
 
-            foreach (var good in goodsArray)
-            {
-                var rn = rand.Next(1, 1000);
-                var tempDeliveryData = new DeliveryData
+                // notify about delivery start
+                var startDeliveryNotification = new DeliveryStartNotification
+                {
+                    ShipId = randomNumber.ToString(),
+                    TransportType = (NotificationApi.TransportType)(randomNumber % 4)
+                };
+                //_notificationActor.Tell(startDeliveryNotification);
+
+                var deliveryData = new DeliveryData
                 {
                     Goods = new string[] { good },
-                    ShipId = rn.ToString(),
-                    TransportType = (DeliveryApi.TransportType)(rn % 4)
+                    ShipId = randomNumber.ToString(),
+                    TransportType = (DeliveryApi.TransportType)(randomNumber % 4)
                 };
+                //var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData, TimeSpan.FromSeconds(5));
 
-                var msg = $"Goods will be delivered by {tempDeliveryData.TransportType} {tempDeliveryData.ShipId}";
+                //var delivaryFinishNotification = new DeliveryFinishNotification
+                //{
+                //    ShipId = randomNumber.ToString(),
+                //    DeliveryDate = result.DeliveryDate,
+                //    IsSuccess = result.IsSuccess
+                //};
+                //_notificationActor.Tell(delivaryFinishNotification);
 
-                var result1 = await deliver.StartDeliveryOneGood(tempDeliveryData);
-                msg = result1.IsSuccess
-               ? $"Your goods are delivered to {result1.Address} successfully"
-               : $"Delivery of your goods was failed";
-                notifyHub.SendMessage();
+                //var msg = result.IsSuccess
+                //? $"Your goods are delivered to {result.Address} by {result.DeliveryDate} successfully"
+                //: $"Delivery of your goods was failed";
+
+                await deliverHub.SendMessageAsync("hello!");
             }
-
-
-
-
-
-            //TODO notify by signalr with actors
-            _notificationActor.Tell(startDeliveryNotification);
-
-            // deliver goods
-            var deliveryData = new DeliveryData
-            {
-                Goods = goods.Split(','),
-                ShipId = randomNumber.ToString(),
-                TransportType = (DeliveryApi.TransportType)(randomNumber % 4)
-            };
-            var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData, TimeSpan.FromSeconds(5));
-
-            // notify about delivery finish
-            var delivaryFinishNotification = new DeliveryFinishNotification
-            {
-                ShipId = randomNumber.ToString(),
-                DeliveryDate = result.DeliveryDate,
-                IsSuccess = result.IsSuccess
-            };
-            _notificationActor.Tell(delivaryFinishNotification);
-
-            return Json(result);
         }
     }
 }

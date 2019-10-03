@@ -12,20 +12,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Core\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="DeliveryActors">
-      <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.2\DeliveryActors.dll</HintPath>
+      <HintPath>..\..\DeliveryService\Web\bin\Debug\netcoreapp2.2\DeliveryActors.dll</HintPath>
     </Reference>
     <Reference Include="DeliveryApi">
-      <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.2\DeliveryApi.dll</HintPath>
+      <HintPath>..\..\DeliveryService\Web\bin\Debug\netcoreapp2.2\DeliveryApi.dll</HintPath>
     </Reference>
     <Reference Include="NotificationActors">
-      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.2\NotificationActors.dll</HintPath>
+      <HintPath>..\..\NotificationService\Web\bin\Debug\netcoreapp2.2\NotificationActors.dll</HintPath>
     </Reference>
     <Reference Include="NotificationApi">
-      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.2\NotificationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="NotificationCore">
-      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.2\NotificationCore.dll</HintPath>
+      <HintPath>..\..\NotificationService\Web\bin\Debug\netcoreapp2.2\NotificationApi.dll</HintPath>
     </Reference>
   </ItemGroup>
 

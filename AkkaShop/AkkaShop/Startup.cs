@@ -76,8 +76,7 @@ namespace AkkaShop
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<DeliveryHub>("/deliveryGoods");
-                routes.MapHub<NotifyHub>("/notify");
+                routes.MapHub<DeliveryHub>("/deliver");
             });
 
             applicationLifetime.ApplicationStarted.Register(() =>
