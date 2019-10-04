@@ -29,6 +29,13 @@
             .withUrl(hubUrl)
             .configureLogging(signalR.LogLevel.Information)
             .build();
+
+        hubConnection.start().then(function () {
+
+            hubConnection.invoke("SendMessageAsync", "Connected");
+
+        });
+
         document.getElementById("sendBtn").addEventListener("click", function (e)
         {
             let message = document.getElementById("message").value;
