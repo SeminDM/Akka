@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "DeliverAsync";
+}
+
+<body>
+    <h2>Put goods</h2>
+    <form action="/Home/DeliverAsync" method="post">
+
+
+        <div class="item">
+            <label>Goods</label>
+            <input name="goods" value="goods" />
+        </div>
+        <!-- <input type="submit" value="Отправить" /> -->
+        <div><button>Отправить</button></div>
+    </form>
+
+    <div id="inputForm">
+        <input type="text" id="message" />
+        <input type="button" id="sendBtn" value="Отправить" />
+    </div>
+    <div id="chatroom"></div>
+
+    <script src="~/js/signalr/signalr.min.js"></script>
+    <script>
+
+        let hubUrl = 'http://localhost:27961/deliver';
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        document.getElementById("sendBtn").addEventListener("click", function (e)
+        {
+            let message = document.getElementById("message").value;
+            hubConnection.invoke("SendMessageAsync", message);
+        });
+
+
+        hubConnection.on("SendMessage", function (data) {
+
+            let elem = document.createElement("p");
+            elem.appendChild(document.createTextNode(data));
+            let firstElem = document.getElementById("chatroom").firstChild;
+            document.getElementById("chatroom").insertBefore(elem, firstElem);
+
+        });
+
+        hubConnection.start();
+    </script>
+</body>

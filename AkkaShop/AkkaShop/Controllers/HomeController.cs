@@ -7,6 +7,7 @@ using Akka.Actor;
 using NotificationApi;
 using DeliveryApi;
 using AkkaShop.Hubs;
+using System.Threading;
 
 namespace AkkaShop.Controllers
 {
@@ -51,15 +52,17 @@ namespace AkkaShop.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task DeliverAsync(string goods)
+        public async Task<IActionResult> DeliverAsync(string goods)
         {
+            if (goods == null)
+                return View();
+
             var rand = new Random();
 
-            goods = "Coffee,Tea,Juice,Pepsi,Fanta";
-
+            //goods = "Coffee,Tea,Juice,Pepsi,Fanta";
+           
             DeliveryHub deliverHub = new DeliveryHub();
-
-            foreach (var good in goods.Split(','))
+            /* foreach (var good in goods.Split(','))
             {
                 var randomNumber = rand.Next(1, 1000);
 
@@ -90,9 +93,11 @@ namespace AkkaShop.Controllers
                 //var msg = result.IsSuccess
                 //? $"Your goods are delivered to {result.Address} by {result.DeliveryDate} successfully"
                 //: $"Delivery of your goods was failed";
-
+*/
                 await deliverHub.SendMessageAsync("hello!");
-            }
+            // }
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+            return  View();
         }
     }
 }
