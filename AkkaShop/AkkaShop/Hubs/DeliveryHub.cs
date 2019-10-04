@@ -5,9 +5,15 @@ namespace AkkaShop.Hubs
 {
     public class DeliveryHub : Hub
     {
+        private static IHubCallerClients Client;
         public async Task SendMessageAsync(string message)
         {
-            await Clients.All.SendAsync("SendMessage", message);
+            if (Clients != null)
+                Client = Clients;
+            if (Client != null)
+            {
+                await Client.All.SendAsync("SendMessage", message);
+            }
         }
     }
 }
