@@ -15,11 +15,7 @@
         <div><button>Отправить</button></div>
     </form>
 
-    <div id="inputForm">
-        <input type="text" id="message" />
-        <input type="button" id="sendBtn" value="Отправить" />
-    </div>
-    <div id="chatroom"></div>
+    <div id="goods"></div>
 
     <script src="~/js/signalr/signalr.min.js"></script>
     <script>
@@ -36,19 +32,12 @@
 
         });
 
-        document.getElementById("sendBtn").addEventListener("click", function (e)
-        {
-            let message = document.getElementById("message").value;
-            hubConnection.invoke("SendMessageAsync", message);
-        });
-
-
         hubConnection.on("SendMessage", function (data) {
 
             let elem = document.createElement("p");
             elem.appendChild(document.createTextNode(data));
-            let firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
+            let firstElem = document.getElementById("goods").firstChild;
+            document.getElementById("goods").insertBefore(elem, firstElem);
 
         });
 
