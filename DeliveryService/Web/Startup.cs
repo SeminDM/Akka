@@ -10,9 +10,9 @@ using Autofac.Extensions.DependencyInjection;
 using System.Runtime.Loader;
 using System.IO;
 using System.Reflection;
-using DeliveryApi;
-using DeliveryCore;
 using DeliveryActors;
+using Akka.Actor;
+using Autofac.Configuration;
 
 namespace DeliveryService
 {
@@ -29,6 +29,7 @@ namespace DeliveryService
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IContainer ApplicationContainer { get; private set; }
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var assembliesPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -38,21 +39,23 @@ namespace DeliveryService
             //    .AddApplicationPart(controllersAssembly).AddControllersAsServices();
             services.AddSingleton<IHostingEnvironment>(_hostingEnvironment);
 
-            services.AddSingleton<IDeliveryService>(new DeliveryCore.DeliveryService());
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
-            var a = typeof(DeliveryActor);
-            //var config = new ConfigurationBuilder();
-            //config.AddJsonFile("autofac.json");
-            //IModule module = new ConfigurationModule(config.Build());// ConfigurationModule(config.Build());
+            
+            var system = ActorSystem.Create("DeliverySystem");
+            services.AddSingleton(_ => system);
+            var deliveryActor = system.ActorOf<DeliveryActor>("DeliveryActor");
+
+            var config = new ConfigurationBuilder();
+            config.AddJsonFile("autofac.json");
+            var module = new ConfigurationModule(config.Build());
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            //builder.RegisterModule(module);
+            builder.RegisterModule(module);
 
             AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext context, AssemblyName assembly) =>
             {
@@ -64,7 +67,7 @@ namespace DeliveryService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -79,6 +82,16 @@ namespace DeliveryService
             }
 
             app.UseMvc();
+
+            applicationLifetime.ApplicationStarted.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>();
+            });
+
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
+            });
         }
     }
 }
