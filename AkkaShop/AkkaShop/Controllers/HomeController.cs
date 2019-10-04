@@ -15,11 +15,13 @@ namespace AkkaShop.Controllers
     {
         private readonly IActorRef _notificationActor;
         private readonly IActorRef _deliveryActor;
+        private readonly DeliveryHub _deliveryHub;
 
-        public HomeController(DeliveryActorProvider deliveryActorProvider, NotificationActorProvider notificationActorProvider)
+        public HomeController(DeliveryActorProvider deliveryActorProvider, NotificationActorProvider notificationActorProvider, DeliveryHub deliveryHub)
         {
             _deliveryActor = deliveryActorProvider();
             _notificationActor = notificationActorProvider();
+            _deliveryHub = deliveryHub;
         }
 
         public IActionResult Index()
@@ -52,16 +54,21 @@ namespace AkkaShop.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> DeliverAsync(string goods)
+        [HttpGet]
+        public IActionResult DeliverAsync()
+        {
+            return  View();
+        }
+        [HttpPost]
+        public async Task DeliverAsync(string goods)
         {
             if (goods == null)
-                return View();
+                return;
 
             var rand = new Random();
 
             //goods = "Coffee,Tea,Juice,Pepsi,Fanta";
-           
-            DeliveryHub deliverHub = new DeliveryHub();
+            
             /* foreach (var good in goods.Split(','))
             {
                 var randomNumber = rand.Next(1, 1000);
@@ -94,10 +101,10 @@ namespace AkkaShop.Controllers
                 //? $"Your goods are delivered to {result.Address} by {result.DeliveryDate} successfully"
                 //: $"Delivery of your goods was failed";
 */
-                await deliverHub.SendMessageAsync("hello!");
+            await _deliveryHub.SendMessageAsync("hello!");
             // }
-            Thread.Sleep(TimeSpan.FromSeconds(3));
-            return  View();
+            return;
         }
+
     }
 }

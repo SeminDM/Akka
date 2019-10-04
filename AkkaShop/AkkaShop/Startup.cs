@@ -49,6 +49,8 @@ namespace AkkaShop
                 return () => deliveryActor;
             });
 
+            services.AddSingleton<DeliveryHub>();
+
             services.AddSignalR();
         }
 
