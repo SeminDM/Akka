@@ -13,18 +13,17 @@ namespace DeliveryCore
             var secondsCount = rand.Next(0, 5);
             Thread.Sleep(TimeSpan.FromSeconds(secondsCount));
             var now = DateTime.Now;
-            var path = @"C:\Users\mosip\Documents\temp\delivery.txt";
+            var path = @"delivery.txt";
             var randomNumber = rand.Next(1, 100);
             var success = randomNumber % 2 == 0;
-            var waitedTime = $"you was waited {secondsCount} seconds";
+            var waitedTime = $"you was waited {secondsCount} days";
 
             var msg = success
                 ? $"Goods {string.Join(",", data.Goods)} are delivered by {data.ShipId} at {now}, {waitedTime}"
                 : $"Delivery was failed at {now}, {waitedTime}";
-            using (StreamWriter sw = new StreamWriter(path, true))
-            {
-                sw.WriteLineAsync(msg);
-            }
+
+            File.AppendAllLines(path, new[] { msg });
+
             return new DeliveryResult { Address = $"{randomNumber} Baker street", DeliveryDate = now, IsSuccess = success };
         }
     }

@@ -13,15 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="DeliveryActors">
-      <HintPath>..\..\DeliveryService\Web\bin\Debug\netcoreapp2.2\DeliveryActors.dll</HintPath>
+      <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.2\DeliveryActors.dll</HintPath>
     </Reference>
     <Reference Include="DeliveryApi">
-      <HintPath>..\..\DeliveryService\Web\bin\Debug\netcoreapp2.2\DeliveryApi.dll</HintPath>
+      <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.2\DeliveryApi.dll</HintPath>
     </Reference>
     <Reference Include="NotificationActors">
       <HintPath>..\..\NotificationService\Web\bin\Debug\netcoreapp2.2\NotificationActors.dll</HintPath>

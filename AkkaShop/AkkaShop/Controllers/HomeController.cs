@@ -54,22 +54,16 @@ namespace AkkaShop.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpGet]
-        public IActionResult DeliverAsync()
+        public IActionResult Delivery()
         {
             return  View();
         }
-        [HttpPost]
+
         public async Task DeliverAsync(string goods)
         {
-            if (goods == null)
-                return;
-
             var rand = new Random();
 
-            //goods = "Coffee,Tea,Juice,Pepsi,Fanta";
-            
-            /* foreach (var good in goods.Split(','))
+            foreach (var good in goods.Split(','))
             {
                 var randomNumber = rand.Next(1, 1000);
 
@@ -79,7 +73,7 @@ namespace AkkaShop.Controllers
                     ShipId = randomNumber.ToString(),
                     TransportType = (NotificationApi.TransportType)(randomNumber % 4)
                 };
-                //_notificationActor.Tell(startDeliveryNotification);
+                _notificationActor.Tell(startDeliveryNotification);
 
                 var deliveryData = new DeliveryData
                 {
@@ -87,23 +81,22 @@ namespace AkkaShop.Controllers
                     ShipId = randomNumber.ToString(),
                     TransportType = (DeliveryApi.TransportType)(randomNumber % 4)
                 };
-                //var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData, TimeSpan.FromSeconds(5));
+                var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData, TimeSpan.FromSeconds(5));
 
-                //var delivaryFinishNotification = new DeliveryFinishNotification
-                //{
-                //    ShipId = randomNumber.ToString(),
-                //    DeliveryDate = result.DeliveryDate,
-                //    IsSuccess = result.IsSuccess
-                //};
-                //_notificationActor.Tell(delivaryFinishNotification);
+                var delivaryFinishNotification = new DeliveryFinishNotification
+                {
+                    ShipId = randomNumber.ToString(),
+                    DeliveryDate = result.DeliveryDate,
+                    IsSuccess = result.IsSuccess
+                };
+                _notificationActor.Tell(delivaryFinishNotification);
 
-                //var msg = result.IsSuccess
-                //? $"Your goods are delivered to {result.Address} by {result.DeliveryDate} successfully"
-                //: $"Delivery of your goods was failed";
-*/
-            await _deliveryHub.SendMessageAsync("hello!");
-            // }
-            return;
+                var msg = result.IsSuccess
+                ? $"Your goods are delivered to {result.Address} by {result.DeliveryDate} successfully"
+                : $"Delivery of your goods to {result.Address} by {result.DeliveryDate} was failed";
+
+                await _deliveryHub.SendMessageAsync(msg);
+            }
         }
 
     }

@@ -3,21 +3,26 @@
 }
 
 <body>
+    <script src="~/js/signalr/signalr.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+
+
+
     <h2>Put goods</h2>
-    <form action="/Home/DeliverAsync" method="post">
+    <form asp-controller="Home" asp-action="DeliverAsync"
+          data-ajax="true"
+          data-ajax-method="POST"
+          data-ajax-mode="replace">
 
+        <label>Goods</label>
+        <input name="goods" value="Coffee,Tea,Juice,Pepsi,Fanta" />
 
-        <div class="item">
-            <label>Goods</label>
-            <input name="goods" value="goods" />
-        </div>
-        <!-- <input type="submit" value="Отправить" /> -->
-        <div><button>Отправить</button></div>
+        <input type="submit" value="Отправить" />
     </form>
 
     <div id="goods"></div>
 
-    <script src="~/js/signalr/signalr.min.js"></script>
     <script>
 
         let hubUrl = 'http://localhost:27961/deliver';
