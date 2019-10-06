@@ -68,32 +68,25 @@ namespace AkkaShop.Controllers
                 var randomNumber = rand.Next(1, 1000);
 
                 // notify about delivery start
-                var startDeliveryNotification = new DeliveryStartNotification
-                {
-                    ShipId = randomNumber.ToString(),
-                    TransportType = (NotificationApi.TransportType)(randomNumber % 4)
-                };
+                var startDeliveryNotification = new DeliveryStartNotification { Good = good };
                 _notificationActor.Tell(startDeliveryNotification);
-
-                var deliveryData = new DeliveryData
-                {
-                    Goods = new string[] { good },
-                    ShipId = randomNumber.ToString(),
-                    TransportType = (DeliveryApi.TransportType)(randomNumber % 4)
-                };
-                var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData, TimeSpan.FromSeconds(5));
-
+                // deliver goods
+                var deliveryData = new DeliveryGoods { Goods = new string[] { good } };
+                var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData);
+                // notify about delivery fibish
                 var delivaryFinishNotification = new DeliveryFinishNotification
                 {
-                    ShipId = randomNumber.ToString(),
+                    Good = good,
+                    TransportType = (NotificationApi.TransportType)result.TransportType,
+                    ShipId = result.ShipId,
                     DeliveryDate = result.DeliveryDate,
                     IsSuccess = result.IsSuccess
                 };
                 _notificationActor.Tell(delivaryFinishNotification);
 
                 var msg = result.IsSuccess
-                ? $"Your goods are delivered to {result.Address} by {result.DeliveryDate} successfully"
-                : $"Delivery of your goods to {result.Address} by {result.DeliveryDate} was failed";
+                ? $"{good} is delivered to {result.Address} by {result.TransportType} {result.ShipId} at {result.DeliveryDate} successfully"
+                : $"{good} delivery to {result.Address} by {result.TransportType} {result.ShipId} at {result.DeliveryDate} was failed";
 
                 await _deliveryHub.SendMessageAsync(msg);
             }

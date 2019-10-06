@@ -22,9 +22,12 @@ namespace ConsoleWeb
                             }
                         }
                     }");
-            using (var system = ActorSystem.Create("TransportMicroservice", config))
+
+            using (var system = ActorSystem.Create("TransportSystem", config))
             {
-                system.ActorOf(Props.Create(() => new TransportActor()), "TransportService");
+                var transportActor = system.ActorOf<TransportActor>("TransportActor");
+                Console.WriteLine(transportActor.Path);
+
                 Console.ReadKey();
             }
         }

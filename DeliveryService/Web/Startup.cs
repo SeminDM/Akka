@@ -13,6 +13,8 @@ using System.Reflection;
 using DeliveryActors;
 using Akka.Actor;
 using Autofac.Configuration;
+using DeliveryApi;
+using Akka.Configuration;
 
 namespace DeliveryService
 {
@@ -44,18 +46,31 @@ namespace DeliveryService
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
-            
-            var system = ActorSystem.Create("DeliverySystem");
+            var config = ConfigurationFactory.ParseString(@"
+akka {  
+    actor {
+        provider = remote
+    }
+    remote {
+        dot-netty.tcp {
+            port = 8082
+            hostname = 0.0.0.0
+            public-hostname = localhost
+        }
+    }
+}
+");
+            var system = ActorSystem.Create("DeliverySystem", config);
             services.AddSingleton(_ => system);
             var deliveryActor = system.ActorOf<DeliveryActor>("DeliveryActor");
 
-            var config = new ConfigurationBuilder();
-            config.AddJsonFile("autofac.json");
-            var module = new ConfigurationModule(config.Build());
+            //var config = new ConfigurationBuilder();
+            //config.AddJsonFile("autofac.json");
+            //var module = new ConfigurationModule(config.Build());
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            builder.RegisterModule(module);
+            //builder.RegisterModule(module);
 
             AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext context, AssemblyName assembly) =>
             {

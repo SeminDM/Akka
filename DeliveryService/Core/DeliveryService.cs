@@ -7,24 +7,29 @@ namespace DeliveryCore
 {
     public class DeliveryService : IDeliveryService
     {
-        public DeliveryResult DeliverGoods(DeliveryData data)
+        public DeliveryResult DeliverGoods(DeliveryGoods data, Api.TransportData transportInfo)
         {
             var rand = new Random();
-            var secondsCount = rand.Next(0, 5);
-            Thread.Sleep(TimeSpan.FromSeconds(secondsCount));
+            Thread.Sleep(TimeSpan.FromSeconds(5));
             var now = DateTime.Now;
-            var path = @"delivery.txt";
+            var path = @"E:\delivery.txt";
             var randomNumber = rand.Next(1, 100);
             var success = randomNumber % 2 == 0;
-            var waitedTime = $"you was waited {secondsCount} days";
 
             var msg = success
-                ? $"Goods {string.Join(",", data.Goods)} are delivered by {data.ShipId} at {now}, {waitedTime}"
-                : $"Delivery was failed at {now}, {waitedTime}";
+                ? $"Goods {string.Join(",", data.Goods)} are delivered by {transportInfo.TransportType} {transportInfo.VehicleNumber} at {now}"
+                : $"Delivery was failed by {transportInfo.TransportType} {transportInfo.VehicleNumber} at {now}";
 
             File.AppendAllLines(path, new[] { msg });
 
-            return new DeliveryResult { Address = $"{randomNumber} Baker street", DeliveryDate = now, IsSuccess = success };
+            return new DeliveryResult
+            {
+                Address = $"Baker street'{randomNumber}",
+                DeliveryDate = now,
+                IsSuccess = success,
+                ShipId = transportInfo.VehicleNumber.ToString(),
+                TransportType = (TransportType)transportInfo.TransportType
+            };
         }
     }
 }

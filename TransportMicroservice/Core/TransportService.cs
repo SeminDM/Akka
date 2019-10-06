@@ -1,8 +1,6 @@
 ﻿using Api;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+using System.IO;
 
 namespace Core
 {
@@ -12,9 +10,22 @@ namespace Core
 
         public TransportData GetTransportInfo(GoodsData goodsData)
         {
-            var secondsCount = rnd.Next(0, 5);
-            Thread.Sleep(TimeSpan.FromSeconds(secondsCount));
-            return new TransportData { VehicleNumber = rnd.Next(10000, 50000), DepartureDate = RandomDate() };
+            var numb = rnd.Next(1, 3);
+            var path = @"E:\transport.txt";
+
+            var id = rnd.Next(10000, 50000);
+            var type = (TransportType)numb;
+
+            var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type}";
+
+            File.AppendAllLines(path, new[] { msg });
+
+            return new TransportData
+            {
+                VehicleNumber = id,
+                DepartureDate = RandomDate(),
+                TransportType = type
+            };
         }
 
         public DateTime RandomDate()

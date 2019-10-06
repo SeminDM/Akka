@@ -4,14 +4,16 @@ namespace NotificationApi
 {
     public class DeliveryStartNotification
     {
-        public string ShipId { get; set; }
-
-        public TransportType TransportType { get; set; }
+        public string Good { get; set; }
     }
 
     public class DeliveryFinishNotification
     {
+        public string Good { get; set; }
+
         public string ShipId { get; set; }
+
+        public TransportType TransportType { get; set; }
 
         public DateTime DeliveryDate { get; set; }
 

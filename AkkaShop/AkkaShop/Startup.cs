@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Akka.Configuration;
 using AkkaShop.Hubs;
 using DeliveryActors;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NotificationActors;
+using System;
 
 namespace AkkaShop
 {
@@ -32,7 +34,21 @@ namespace AkkaShop
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // add actor system
-            var system = ActorSystem.Create("AkkaShop");
+            var config = ConfigurationFactory.ParseString(@"
+akka {  
+    actor {
+        provider = remote
+    }
+    remote {
+        dot-netty.tcp {
+            port = 8080
+            hostname = 0.0.0.0
+            public-hostname = localhost
+        }
+    }
+}
+");
+            var system = ActorSystem.Create("ShopSystem", config);
             services.AddSingleton(_ => system);
             // actor delegates
             services.AddSingleton<NotificationActorProvider>(provider =>
@@ -45,7 +61,8 @@ namespace AkkaShop
             services.AddSingleton<DeliveryActorProvider>(provider =>
             {
                 var actorSystem = provider.GetService<ActorSystem>();
-                var deliveryActor = actorSystem.ActorOf<DeliveryActor>("DeliveryActor");
+                var deliveryActorSelection = actorSystem.ActorSelection("akka.tcp://DeliverySystem@localhost:8082/user/DeliveryActor");
+                var deliveryActor = deliveryActorSelection.ResolveOne(TimeSpan.FromSeconds(5)).Result;
                 return () => deliveryActor;
             });
 

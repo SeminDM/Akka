@@ -2,6 +2,6 @@
 {
     public interface IDeliveryService
     {
-        DeliveryResult DeliverGoods(DeliveryData data);
+        DeliveryResult DeliverGoods(DeliveryGoods data, Api.TransportData transportInfo);
     }
 }

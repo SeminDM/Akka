@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleWeb", "ConsoleWeb\ConsoleWeb.csproj", "{98A594E1-6320-4EF2-8311-CE262018199C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "ConsoleWeb\Console.csproj", "{98A594E1-6320-4EF2-8311-CE262018199C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{B365AF96-F705-4336-87A4-8CCFF064449B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{B365AF96-F705-4336-87A4-8CCFF064449B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{F2727A90-81E8-44C5-B629-ABF25BF9590F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{F2727A90-81E8-44C5-B629-ABF25BF9590F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actors", "Actors\Actors.csproj", "{C3FD7C1D-0AFF-4828-8E7C-2EB40D83D3F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Actors", "Actors\Actors.csproj", "{C3FD7C1D-0AFF-4828-8E7C-2EB40D83D3F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

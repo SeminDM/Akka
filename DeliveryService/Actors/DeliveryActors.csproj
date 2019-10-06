@@ -13,4 +13,10 @@
     <ProjectReference Include="..\Core\DeliveryCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Api">
+      <HintPath>..\..\TransportMicroservice\Api\bin\Debug\netcoreapp2.2\Api.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
