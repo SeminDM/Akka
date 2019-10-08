@@ -16,13 +16,8 @@ namespace DeliveryActors
 
             Receive<DeliveryGoods>(msg =>
             {
-                var getTransportData = new Api.GoodsData
-                {
-                    Height = 100,
-                    Length = 200,
-                    Weight = 300,
-                    Width = 400
-                };
+                var getTransportData = new Api.GoodsData(100, 200, 300, 400);
+
                 var transportInfo = (Api.TransportData) _server.Ask(getTransportData).Result;
 
                 var result = _service.DeliverGoods(msg, transportInfo);

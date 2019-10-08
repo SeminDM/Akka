@@ -54,11 +54,13 @@ namespace AkkaShop.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Delivery()
+        [HttpGet]
+        public IActionResult DeliverAsync()
         {
             return  View();
         }
 
+        [HttpPost]
         public async Task DeliverAsync(string goods)
         {
             var rand = new Random();
@@ -68,20 +70,15 @@ namespace AkkaShop.Controllers
                 var randomNumber = rand.Next(1, 1000);
 
                 // notify about delivery start
-                var startDeliveryNotification = new DeliveryStartNotification { Good = good };
+                var startDeliveryNotification = new DeliveryStartNotification(good);
                 _notificationActor.Tell(startDeliveryNotification);
                 // deliver goods
-                var deliveryData = new DeliveryGoods { Goods = new string[] { good } };
+                var deliveryData = new DeliveryGoods( new string[] { good });
                 var result = await _deliveryActor.Ask<DeliveryResult>(deliveryData);
-                // notify about delivery fibish
-                var delivaryFinishNotification = new DeliveryFinishNotification
-                {
-                    Good = good,
-                    TransportType = (NotificationApi.TransportType)result.TransportType,
-                    ShipId = result.ShipId,
-                    DeliveryDate = result.DeliveryDate,
-                    IsSuccess = result.IsSuccess
-                };
+                // notify about delivery finish
+                var delivaryFinishNotification = new DeliveryFinishNotification(good, result.ShipId, 
+                    (NotificationApi.TransportType)result.TransportType, result.DeliveryDate, result.IsSuccess);
+
                 _notificationActor.Tell(delivaryFinishNotification);
 
                 var msg = result.IsSuccess
