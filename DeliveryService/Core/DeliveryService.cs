@@ -12,7 +12,7 @@ namespace DeliveryCore
             var rand = new Random();
             Thread.Sleep(TimeSpan.FromSeconds(5));
             var now = DateTime.Now;
-            var path = @"E:\delivery.txt";
+            var path = Configurator.GetValue<string>("ReportPath");
             var randomNumber = rand.Next(1, 100);
             var success = randomNumber % 2 == 0;
 
@@ -22,14 +22,8 @@ namespace DeliveryCore
 
             File.AppendAllLines(path, new[] { msg });
 
-            return new DeliveryResult
-            {
-                Address = $"Baker street'{randomNumber}",
-                DeliveryDate = now,
-                IsSuccess = success,
-                ShipId = transportInfo.VehicleNumber.ToString(),
-                TransportType = (TransportType)transportInfo.TransportType
-            };
+            return new DeliveryResult((TransportType)transportInfo.TransportType, transportInfo.VehicleNumber.ToString(),
+                now, $"Baker street'{randomNumber}", success);
         }
     }
 }
