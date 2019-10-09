@@ -15,10 +15,10 @@ namespace NotificationCore
             {
                 if (_config == null)
                 {
-                    var conBuilder = new ConfigurationBuilder();
-                    string currentDirectory = Directory.GetCurrentDirectory();
-                    conBuilder.AddJsonFile(currentDirectory + "/appsettings.json");
-                    _config = conBuilder.Build();
+                    var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json");
+                    _config = builder.Build();
                 }
                 return _config;
             }

@@ -7,7 +7,7 @@ namespace NotificationCore
     {
         public void NotifyAboutDeliveryStart(DeliveryStartNotification data)
         {
-            var path = Configurator.GetValue<string>("PathToSaveNotify");
+            var path = Configurator.GetValue<string>("ReportPath");
             
             var msg = $"{data.Good} will be delivered";
             File.AppendAllLines(path, new[] { msg });
@@ -15,7 +15,7 @@ namespace NotificationCore
 
         public void NotifyAboutDeliveryFinish(DeliveryFinishNotification data)
         {
-            var path = Configurator.GetValue<string>("PathToSaveNotify");
+            var path = Configurator.GetValue<string>("ReportPath");
             var msg = data.IsSuccess 
                 ? $"{data.Good} are delivered by {data.TransportType} {data.ShipId} successfully"
                 : $"Delivery of {data.Good} by {data.TransportType} {data.ShipId} was failed";

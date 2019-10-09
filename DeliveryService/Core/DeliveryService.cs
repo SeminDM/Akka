@@ -12,7 +12,7 @@ namespace DeliveryCore
             var rand = new Random();
             Thread.Sleep(TimeSpan.FromSeconds(5));
             var now = DateTime.Now;
-            var path = Configurator.GetValue<string>("PathToSaveDeliveryResult");
+            var path = Configurator.GetValue<string>("ReportPath");
             var randomNumber = rand.Next(1, 100);
             var success = randomNumber % 2 == 0;
 

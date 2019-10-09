@@ -15,10 +15,10 @@ namespace Core
             {
                 if (_config == null)
                 {
-                    var conBuilder = new ConfigurationBuilder();
-                    string currentDirectory = @"C:\Users\mosip\Documents\Microservices-with-Akka.NetDM\TransportMicroservice\Core";
-                    conBuilder.AddJsonFile(currentDirectory + "/config.json");
-                    _config = conBuilder.Build();
+                    var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("config.json");
+                    _config = builder.Build();
                 }
                 return _config;
             }
