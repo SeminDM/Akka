@@ -14,9 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Api">
-      <HintPath>..\..\DeliveryService\Api\bin\Debug\netcoreapp2.2\Api.dll</HintPath>
-    </Reference>
     <Reference Include="DeliveryActors">
       <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.2\DeliveryActors.dll</HintPath>
     </Reference>
