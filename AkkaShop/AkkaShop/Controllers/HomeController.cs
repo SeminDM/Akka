@@ -53,14 +53,12 @@ namespace AkkaShop.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        [HttpGet]
-        public IActionResult DeliverAsync()
+        
+        public IActionResult Delivery()
         {
             return  View();
         }
 
-        [HttpPost]
         public async Task DeliverAsync(string goods)
         {
             var rand = new Random();
