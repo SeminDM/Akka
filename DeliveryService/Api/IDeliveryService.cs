@@ -4,6 +4,6 @@ namespace DeliveryApi
 {
     public interface IDeliveryService
     {
-        Task<DeliveryResult> DeliverGoods(DeliveryGoods data, Api.TransportData transportInfo);
+        DeliveryResult DeliverGoods(DeliveryGoods data, Api.TransportData transportInfo);
     }
 }

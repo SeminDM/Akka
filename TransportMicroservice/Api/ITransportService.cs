@@ -7,6 +7,6 @@ namespace Api
 {
     public interface ITransportService
     {
-        Task<TransportData> GetTransportInfo(GoodsData goodsData);
+        TransportData GetTransportInfo(GoodsData goodsData);
     }
 }

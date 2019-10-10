@@ -15,13 +15,13 @@ namespace DeliveryActors
 
             _service = new DeliveryService();
 
-            ReceiveAsync<DeliveryGoods>(async msg =>
+            Receive<DeliveryGoods>(msg =>
             {
                 var getTransportData = new Api.GoodsData(100, 200, 300, 400);
 
-                var transportInfo = (Api.TransportData)await _server.Ask(getTransportData);
+                var transportInfo = (Api.TransportData) _server.Ask(getTransportData).Result;
                 
-                var result = await _service.DeliverGoods(msg, transportInfo);
+                var result = _service.DeliverGoods(msg, transportInfo);
                 
                 Sender.Tell(result);
             });
