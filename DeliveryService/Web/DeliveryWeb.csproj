@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Core\DeliveryCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Settings\deliveryActor.hocon">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -15,8 +15,10 @@ namespace Actors
             Receive<GoodsData>(msg =>
             {
                 var result = _service.GetTransportInfo(msg);
+                
                 Sender.Tell(result);
             });
         }
     }
+
 }

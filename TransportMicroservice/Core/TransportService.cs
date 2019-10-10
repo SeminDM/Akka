@@ -1,6 +1,7 @@
 ﻿using Api;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -19,8 +20,8 @@ namespace Core
             var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type}";
 
             File.AppendAllLines(path, new string[] { msg });
-
             return new TransportData(id, RandomDate(), type);
+
         }
 
         public DateTime RandomDate()

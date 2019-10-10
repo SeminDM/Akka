@@ -8,10 +8,11 @@ namespace DeliveryActors
     public class DeliveryActor : ReceiveActor
     {
         private readonly IDeliveryService _service;
-        private readonly ActorSelection _server = Context.ActorSelection("akka.tcp://TransportSystem@localhost:8081/user/TransportActor");
+        private readonly ActorSelection _server = Context.ActorSelection(DeliveryActorSettings.TransportActorUrl);
 
         public DeliveryActor()
         {
+
             _service = new DeliveryService();
 
             Receive<DeliveryGoods>(msg =>
@@ -19,8 +20,9 @@ namespace DeliveryActors
                 var getTransportData = new Api.GoodsData(100, 200, 300, 400);
 
                 var transportInfo = (Api.TransportData) _server.Ask(getTransportData).Result;
-
+                
                 var result = _service.DeliverGoods(msg, transportInfo);
+                
                 Sender.Tell(result);
             });
         }

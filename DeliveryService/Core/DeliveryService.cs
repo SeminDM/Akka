@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DeliveryCore
 {
@@ -9,6 +10,7 @@ namespace DeliveryCore
     {
         public DeliveryResult DeliverGoods(DeliveryGoods data, Api.TransportData transportInfo)
         {
+
             var rand = new Random();
             Thread.Sleep(TimeSpan.FromSeconds(5));
             var now = DateTime.Now;
@@ -25,5 +27,6 @@ namespace DeliveryCore
             return new DeliveryResult((TransportType)transportInfo.TransportType, transportInfo.VehicleNumber.ToString(),
                 now, $"Baker street'{randomNumber}", success);
         }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DeliveryApi
+﻿using System.Threading.Tasks;
+
+namespace DeliveryApi
 {
     public interface IDeliveryService
     {
