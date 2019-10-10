@@ -21,10 +21,10 @@
       <HintPath>..\..\DeliveryService\Actors\bin\Debug\netcoreapp2.2\DeliveryApi.dll</HintPath>
     </Reference>
     <Reference Include="NotificationActors">
-      <HintPath>..\..\NotificationService\Web\bin\Debug\netcoreapp2.2\NotificationActors.dll</HintPath>
+      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.2\NotificationActors.dll</HintPath>
     </Reference>
     <Reference Include="NotificationApi">
-      <HintPath>..\..\NotificationService\Web\bin\Debug\netcoreapp2.2\NotificationApi.dll</HintPath>
+      <HintPath>..\..\NotificationService\Actors\bin\Debug\netcoreapp2.2\NotificationApi.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using Akka.Configuration;
 using AkkaShop.Hubs;
 using DeliveryActors;
+using DeliveryApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,6 @@ namespace AkkaShop
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
             // add actor system
             var system = ActorSystem.Create("ShopSystem", ShopActorSettings.config);
             services.AddSingleton(_ => system);

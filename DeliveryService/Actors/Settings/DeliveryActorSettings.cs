@@ -1,5 +1,5 @@
 ﻿using Akka.Configuration;
-using DeliveryCore;
+using DeliveryApi;
 using System.IO;
 
 namespace DeliveryActors
