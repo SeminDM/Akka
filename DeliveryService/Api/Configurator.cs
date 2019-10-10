@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace DeliveryCore
+namespace DeliveryApi
 {
     public static class Configurator
     {
@@ -33,3 +33,4 @@ namespace DeliveryCore
         }
     }
 }
+

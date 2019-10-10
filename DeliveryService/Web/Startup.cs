@@ -14,7 +14,6 @@ using DeliveryActors;
 using Akka.Actor;
 using Autofac.Configuration;
 using DeliveryApi;
-using Akka.Configuration;
 
 namespace DeliveryService
 {
@@ -45,25 +44,27 @@ namespace DeliveryService
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
-            
-            var system = ActorSystem.Create("DeliverySystem", DeliveryActorSettings.config);
-            services.AddSingleton(_ => system);
-            var deliveryActor = system.ActorOf<DeliveryActor>("DeliveryActor");
 
-            //var config = new ConfigurationBuilder();
-            //config.AddJsonFile("autofac.json");
-            //var module = new ConfigurationModule(config.Build());
+            var config = new ConfigurationBuilder();
+            config.AddJsonFile("autofac.json");
+            var module = new ConfigurationModule(config.Build());
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            //builder.RegisterModule(module);
-
+            builder.RegisterModule(module);
+            
             AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext context, AssemblyName assembly) =>
             {
                 var curassemblyname = $"{assembly.Name}.dll";
                 return context.LoadFromAssemblyPath(Path.Combine(assembliesPath, curassemblyname));
             };
             ApplicationContainer = builder.Build();
+
+            var scope = ApplicationContainer.BeginLifetimeScope();
+            var service = scope.Resolve<IDeliveryService>();
+            ApplicationActorsSystem aap = new ApplicationActorsSystem(service);
+            string a = ApplicationActorsSystem.Instance.SystemNum;
+
             return new AutofacServiceProvider(ApplicationContainer);
         }
 

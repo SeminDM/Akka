@@ -1,0 +1,12 @@
+{
+  "components": [
+    {
+      "type": "DeliveryCore.DeliveryService, DeliveryCore",
+      "services": [
+        {
+          "type": "DeliveryApi.IDeliveryService, DeliveryApi"
+        }
+      ]
+    }
+  ]
+}
