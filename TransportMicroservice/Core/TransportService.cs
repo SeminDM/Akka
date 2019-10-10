@@ -1,6 +1,7 @@
 ﻿using Api;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -8,19 +9,22 @@ namespace Core
     {
         Random rnd = new Random();
 
-        public TransportData GetTransportInfo(GoodsData goodsData)
+        public async Task<TransportData> GetTransportInfo(GoodsData goodsData)
         {
-            var numb = rnd.Next(1, 3);
-            var path = Configurator.GetValue<string>("ReportPath");
+            return Task.Run(() =>
+            {
+                var numb = rnd.Next(1, 3);
+                var path = Configurator.GetValue<string>("ReportPath");
 
-            var id = rnd.Next(10000, 50000);
-            var type = (TransportType)numb;
+                var id = rnd.Next(10000, 50000);
+                var type = (TransportType)numb;
 
-            var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type}";
+                var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type}";
 
-            File.AppendAllLines(path, new string[] { msg });
+                File.AppendAllLines(path, new string[] { msg });
+                return new TransportData(id, RandomDate(), type);
 
-            return new TransportData(id, RandomDate(), type);
+            }).Result;
         }
 
         public DateTime RandomDate()

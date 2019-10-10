@@ -45,22 +45,8 @@ namespace DeliveryService
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
-
-            var config = ConfigurationFactory.ParseString(@"
-akka {  
-    actor {
-        provider = remote
-    }
-    remote {
-        dot-netty.tcp {
-            port = 8082
-            hostname = 0.0.0.0
-            public-hostname = localhost
-        }
-    }
-}
-");
-            var system = ActorSystem.Create("DeliverySystem", config);
+            
+            var system = ActorSystem.Create("DeliverySystem", DeliveryActorSettings.config);
             services.AddSingleton(_ => system);
             var deliveryActor = system.ActorOf<DeliveryActor>("DeliveryActor");
 
