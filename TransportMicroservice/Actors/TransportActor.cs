@@ -12,9 +12,9 @@ namespace Actors
         {
             _service = new TransportService();
 
-            Receive<GoodsData>(msg =>
+            ReceiveAsync<GoodsData>(async msg =>
             {
-                var result = _service.GetTransportInfo(msg);
+                var result = await _service.GetTransportInfoAsync(msg);
                 
                 Sender.Tell(result);
             });
