@@ -14,6 +14,7 @@ using DeliveryActors;
 using Akka.Actor;
 using Autofac.Configuration;
 using DeliveryApi;
+using Api;
 
 namespace DeliveryService
 {
@@ -61,8 +62,9 @@ namespace DeliveryService
             ApplicationContainer = builder.Build();
 
             var scope = ApplicationContainer.BeginLifetimeScope();
-            var service = scope.Resolve<IDeliveryService>();
-            ApplicationActorsSystem aap = new ApplicationActorsSystem(service);
+            var serviceDelivery = scope.Resolve<IDeliveryService>();
+            var serviceTransport = scope.Resolve<ITransportService>();
+            ApplicationActorsSystem aap = new ApplicationActorsSystem(serviceDelivery, serviceTransport);
             string a = ApplicationActorsSystem.Instance.SystemNum;
 
             return new AutofacServiceProvider(ApplicationContainer);

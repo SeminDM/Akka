@@ -8,13 +8,14 @@ namespace Api
         public int Height { get; }
         public int Width { get; }
         public int Weight { get; }
-
-        public GoodsData(int Length, int Height, int Width, int Weight)
+        public string Description { get; set; }
+        public GoodsData(int length, int height, int width, int weight, string description)
         {
-            this.Length = Length;
-            this.Height = Height;
-            this.Width = Width;
-            this.Weight = Weight;
+            Length = length;
+            Height = height;
+            Width = width;
+            Weight = weight;
+            Description = description;
         }
     }
 

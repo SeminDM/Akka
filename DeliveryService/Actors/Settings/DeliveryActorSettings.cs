@@ -9,5 +9,6 @@ namespace DeliveryActors
         public static readonly Config config = ConfigurationFactory.ParseString(File.ReadAllText("Settings/deliveryActor.hocon"));
 
         public static readonly string TransportActorUrl = Configurator.GetValue<string>("TransportActorUrl");
+        public static readonly string TransportActorUrlForDeployment = Configurator.GetValue<string>("TransportActorUrlForDeployment");
     }
 }

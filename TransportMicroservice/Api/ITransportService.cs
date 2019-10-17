@@ -8,6 +8,5 @@ namespace Api
     public interface ITransportService
     {
         TransportData GetTransportInfo(GoodsData goodsData);
-        Task<TransportData> GetTransportInfoAsync(GoodsData goodsData);
     }
 }

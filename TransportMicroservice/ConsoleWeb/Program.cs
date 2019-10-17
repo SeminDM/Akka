@@ -10,8 +10,8 @@ namespace ConsoleWeb
         {
             using (var system = ActorSystem.Create("TransportSystem", TranspotrActorSettings.config))
             {
-                var transportActor = system.ActorOf<TransportActor>("TransportActor");
-                Console.WriteLine(transportActor.Path);
+                //var transportActor = system.ActorOf<TransportActor>("TransportActor");
+                //Console.WriteLine(transportActor.Path);
                 Console.ReadKey();
             }
         }

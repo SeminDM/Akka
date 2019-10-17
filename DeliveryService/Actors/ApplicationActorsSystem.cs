@@ -1,10 +1,12 @@
 ﻿using Akka.Actor;
 using Akka.Configuration;
+using Api;
 using DeliveryApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Actors;
 
 namespace DeliveryActors
 {
@@ -12,12 +14,14 @@ namespace DeliveryActors
     {
         private static volatile ApplicationActorsSystem instance;
         private static readonly object instanceLock = new object();
-        
+
         public static IDeliveryService DeliveryService { get; private set; }
+        public static ITransportService TransportService { get; private set; }
 
         public ActorSystem ActorSystem { get; private set; }
         public ActorSelection TransportActorInstance { get; private set; }
         public IActorRef DeliveryActorInstance { get; private set; }
+        public IActorRef TransportActorLink { get; private set; }
         public string SystemNum = "1";
         public static ApplicationActorsSystem Instance
         {
@@ -31,10 +35,14 @@ namespace DeliveryActors
                 {
                     if (instance == null)
                     {
+                        Address address = Address.Parse(DeliveryActorSettings.TransportActorUrlForDeployment);
                         var app = instance = new ApplicationActorsSystem();
                         app.ActorSystem = ActorSystem.Create("DeliverySystem", DeliveryActorSettings.config);
                         app.DeliveryActorInstance = app.ActorSystem.ActorOf(DeliveryActor.Props(DeliveryService), "DeliveryActor");
-                        app.TransportActorInstance = app.ActorSystem.ActorSelection(DeliveryActorSettings.TransportActorUrl);
+                        app.TransportActorLink = app.ActorSystem.ActorOf(TransportActor.Props(TransportService)
+                           .WithDeploy(Deploy.None.WithScope(new RemoteScope(address))), "TransportDeploy");
+                        //app.TransportActorInstance = app.ActorSystem.ActorSelection(DeliveryActorSettings.TransportActorUrl);
+                        //var k = app.TransportActorInstance.ResolveOne(TimeSpan.FromSeconds(2));
                     }
                 }
                 return instance;
@@ -45,9 +53,10 @@ namespace DeliveryActors
 
         }
 
-        public ApplicationActorsSystem(IDeliveryService deliveryService)
+        public ApplicationActorsSystem(IDeliveryService deliveryService, ITransportService transportService)
         {
             DeliveryService = deliveryService;
+            TransportService = transportService;
         }
     }
 }
