@@ -7,6 +7,14 @@
           "type": "DeliveryApi.IDeliveryService, DeliveryApi"
         }
       ]
+    },
+    {
+      "type": "Core.TransportService, Core",
+      "services": [
+        {
+          "type": "Api.ITransportService, Api"
+        }
+      ]
     }
   ]
 }

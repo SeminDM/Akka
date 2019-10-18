@@ -17,13 +17,11 @@ namespace Core
             var id = rnd.Next(10000, 50000);
             var type = (TransportType)numb;
 
-            var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type}";
+            var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type} Description {goodsData.Description}";
 
             File.AppendAllLines(path, new string[] { msg });
             return new TransportData(id, RandomDate(), type);
-
         }
-
         public async Task<TransportData> GetTransportInfoAsync(GoodsData goodsData)
         {
             var numb = rnd.Next(1, 3);
@@ -32,11 +30,10 @@ namespace Core
             var id = rnd.Next(10000, 50000);
             var type = (TransportType)numb;
 
-            var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type}";
+            var msg = $"Width: {goodsData.Width} Length: {goodsData.Length} => Transport: {id} - {type} Description {goodsData.Description}";
 
             await File.AppendAllLinesAsync(path, new string[] { msg });
             return new TransportData(id, RandomDate(), type);
-
         }
 
         public DateTime RandomDate()
