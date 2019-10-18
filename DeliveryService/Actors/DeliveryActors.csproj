@@ -15,11 +15,17 @@
   
   <ItemGroup>
     <Reference Include="Actors">
-      <HintPath>..\Web\bin\Debug\netcoreapp2.2\Actors.dll</HintPath>
+      <HintPath>..\..\TransportMicroservice\Console\bin\Debug\netcoreapp2.2\Actors.dll</HintPath>
     </Reference>
     <Reference Include="Api">
-      <HintPath>..\Web\bin\Debug\netcoreapp2.2\Api.dll</HintPath>
+      <HintPath>..\..\TransportMicroservice\Console\bin\Debug\netcoreapp2.2\Api.dll</HintPath>
     </Reference>
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <None Update="Settings\deliveryActor.hocon">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
 </Project>
