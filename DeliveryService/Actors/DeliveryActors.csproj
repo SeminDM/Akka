@@ -15,10 +15,10 @@
   
   <ItemGroup>
     <Reference Include="Actors">
-      <HintPath>..\..\TransportMicroservice\Console\bin\Debug\netcoreapp2.2\Actors.dll</HintPath>
+      <HintPath>..\..\TransportMicroservice\ConsoleWeb\bin\Debug\netcoreapp2.2\Actors.dll</HintPath>
     </Reference>
     <Reference Include="Api">
-      <HintPath>..\..\TransportMicroservice\Console\bin\Debug\netcoreapp2.2\Api.dll</HintPath>
+      <HintPath>..\..\TransportMicroservice\ConsoleWeb\bin\Debug\netcoreapp2.2\Api.dll</HintPath>
     </Reference>
   </ItemGroup>
   
