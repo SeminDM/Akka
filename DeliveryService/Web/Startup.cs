@@ -13,8 +13,6 @@ using System.Reflection;
 using DeliveryActors;
 using Akka.Actor;
 using Autofac.Configuration;
-using DeliveryApi;
-using Api;
 
 namespace DeliveryService
 {
@@ -53,7 +51,7 @@ namespace DeliveryService
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(module);
-            
+
             AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext context, AssemblyName assembly) =>
             {
                 var curassemblyname = $"{assembly.Name}.dll";
@@ -61,11 +59,11 @@ namespace DeliveryService
             };
             ApplicationContainer = builder.Build();
 
-            var scope = ApplicationContainer.BeginLifetimeScope();
-            var serviceDelivery = scope.Resolve<IDeliveryService>();
-            var serviceTransport = scope.Resolve<ITransportService>();
-            ApplicationActorsSystem aap = new ApplicationActorsSystem(serviceDelivery, serviceTransport);
-            string a = ApplicationActorsSystem.Instance.SystemNum;
+            using (var scope = ApplicationContainer.BeginLifetimeScope())
+            {
+                ApplicationActorsSystem system = new ApplicationActorsSystem(scope);
+                var instance = ApplicationActorsSystem.Instance;
+            }
 
             return new AutofacServiceProvider(ApplicationContainer);
         }

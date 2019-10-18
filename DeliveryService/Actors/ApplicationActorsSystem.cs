@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Autofac;
 using Actors;
 
 namespace DeliveryActors
@@ -14,15 +15,17 @@ namespace DeliveryActors
     {
         private static volatile ApplicationActorsSystem instance;
         private static readonly object instanceLock = new object();
+        private static ILifetimeScope lifetimeScope;
 
-        public static IDeliveryService DeliveryService { get; private set; }
-        public static ITransportService TransportService { get; private set; }
+        public IDeliveryService DeliveryService { get; private set; }
+        public ITransportService TransportService { get; private set; }
 
         public ActorSystem ActorSystem { get; private set; }
-        public ActorSelection TransportActorInstance { get; private set; }
+
         public IActorRef DeliveryActorInstance { get; private set; }
-        public IActorRef TransportActorLink { get; private set; }
-        public string SystemNum = "1";
+        //public ActorSelection TransportActorInstance { get; private set; }
+        public IActorRef TransportActorInstance { get; private set; }
+
         public static ApplicationActorsSystem Instance
         {
             get
@@ -35,11 +38,14 @@ namespace DeliveryActors
                 {
                     if (instance == null)
                     {
-                        Address address = Address.Parse(DeliveryActorSettings.TransportActorUrlForDeployment);
                         var app = instance = new ApplicationActorsSystem();
+                        app.DeliveryService = lifetimeScope.Resolve<IDeliveryService>();
+                        app.TransportService = lifetimeScope.Resolve<ITransportService>();
+
                         app.ActorSystem = ActorSystem.Create("DeliverySystem", DeliveryActorSettings.config);
-                        app.DeliveryActorInstance = app.ActorSystem.ActorOf(DeliveryActor.Props(DeliveryService), "DeliveryActor");
-                        app.TransportActorLink = app.ActorSystem.ActorOf(TransportActor.Props(TransportService)
+                        app.DeliveryActorInstance = app.ActorSystem.ActorOf(DeliveryActor.Props(app.DeliveryService), "DeliveryActor");
+                        Address address = Address.Parse(DeliveryActorSettings.TransportActorUrlForDeployment);
+                        app.TransportActorInstance = app.ActorSystem.ActorOf(TransportActor.Props(app.TransportService)
                            .WithDeploy(Deploy.None.WithScope(new RemoteScope(address))), "TransportDeploy");
                         //app.TransportActorInstance = app.ActorSystem.ActorSelection(DeliveryActorSettings.TransportActorUrl);
                         //var k = app.TransportActorInstance.ResolveOne(TimeSpan.FromSeconds(2));
@@ -53,10 +59,9 @@ namespace DeliveryActors
 
         }
 
-        public ApplicationActorsSystem(IDeliveryService deliveryService, ITransportService transportService)
+        public ApplicationActorsSystem(ILifetimeScope scope)
         {
-            DeliveryService = deliveryService;
-            TransportService = transportService;
+            lifetimeScope = scope;
         }
     }
 }

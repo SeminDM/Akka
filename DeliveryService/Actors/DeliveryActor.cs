@@ -15,7 +15,7 @@ namespace DeliveryActors
             ReceiveAsync<DeliveryGoods>( async msg =>
             {
                 var getTransportData = new Api.GoodsData(100, 200, 300, 400, "description");
-                var transport = ApplicationActorsSystem.Instance.TransportActorLink;
+                var transport = ApplicationActorsSystem.Instance.TransportActorInstance;
                 var transportInfo = (Api.TransportData) await ApplicationActorsSystem.Instance.TransportActorInstance.Ask(getTransportData);
                 var result = await _deliveryService.DeliverGoodsAsync(msg, transportInfo);
                 Sender.Tell(result);
