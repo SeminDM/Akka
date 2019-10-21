@@ -1,6 +1,14 @@
 ﻿akka {  
     actor {
         provider = remote
+		my-dispatcher {
+		    type = Dispatcher
+		    throughput = 100
+		    throughput-deadline-time = 0ms
+		}
+		custom-mailbox {
+		    mailbox-type : "Actors.CustomMailbox, Actors"
+		}
 		serialize-messages = on
 		serializers	{
 			hyperion = "Akka.Serialization.HyperionSerializer, Akka.Serialization.Hyperion"
@@ -10,11 +18,15 @@
 		}
     }
     remote {
-        helios.tcp {
+		dot-netty.tcp {
             port = 8081
             hostname = 0.0.0.0
             public-hostname = localhost
 			maximum-frame-size = 500000b
         }
     }
+}
+/TransportActor {
+       dispatcher = akka.my-dispatcher
+	   mailbox = custom-mailbox
 }

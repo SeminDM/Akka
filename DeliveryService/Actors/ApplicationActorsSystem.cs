@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using Actors;
 
 namespace DeliveryActors
 {
@@ -39,10 +38,11 @@ namespace DeliveryActors
                         var app = instance = new ApplicationActorsSystem();
                         app.ActorSystem = ActorSystem.Create("DeliverySystem", DeliveryActorSettings.config);
                         app.DeliveryActorInstance = app.ActorSystem.ActorOf(DeliveryActor.Props(DeliveryService), "DeliveryActor");
-                        app.TransportActorLink = app.ActorSystem.ActorOf(TransportActor.Props(TransportService)
-                           .WithDeploy(Deploy.None.WithScope(new RemoteScope(address))), "TransportDeploy");
-                        //app.TransportActorInstance = app.ActorSystem.ActorSelection(DeliveryActorSettings.TransportActorUrl);
+                        //app.TransportActorLink = app.ActorSystem.ActorOf(TransportActor.Props(TransportService)
+                        //   .WithDeploy(Deploy.None.WithScope(new RemoteScope(address))), "TransportDeploy");
+                        app.TransportActorInstance = app.ActorSystem.ActorSelection(DeliveryActorSettings.TransportActorUrl);
                         //var k = app.TransportActorInstance.ResolveOne(TimeSpan.FromSeconds(2));
+                        app.DeliveryActorInstance.Tell(new DeliveryGoods(new string[] { "asd" }));
                     }
                 }
                 return instance;
