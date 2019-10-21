@@ -14,17 +14,9 @@ namespace Actors
         private static int counter = 0;
         private Stopwatch Stopwatch = new Stopwatch();
         private static string path = @"C:\Temporary\FromPerfomaceTestResultTransport.txt";
-        private readonly ITransportService _service;
 
-        public TransportActor(/*ITransportService service*/)
+        public TransportActor()
         {
-            /* _service = service;
-
-             ReceiveAsync<GoodsData>(async msg =>
-             {
-                 var result = await _service.GetTransportInfoAsync(msg);
-                 Sender.Tell(result);
-             });*/
             Receive<GoodsData>(_ =>
             {
                 Stopwatch.Start();
@@ -46,10 +38,5 @@ namespace Actors
 
             }); 
         }
- /*
-       public static Props Props(ITransportService transportService)
-        {
-            return Akka.Actor.Props.Create(() => new TransportActor(transportService));
-        }*/
     }
 }

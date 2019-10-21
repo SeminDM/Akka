@@ -8,23 +8,12 @@ namespace DeliveryActors
 {
     public class DeliveryActor : ReceiveActor
     {
-        private readonly IDeliveryService _deliveryService;
         private Stopwatch Stopwatch = new Stopwatch();
         public DeliveryActor(IDeliveryService deliveryService)
         {
-            _deliveryService = deliveryService;
 
             var messagePerformanceTest = File.ReadAllText(@"C:\Temporary\FromPerfomaceTestMessage.txt");//10kb
-
-            //ReceiveAsync<DeliveryGoods>( async msg =>
-            //{
-            //    var getTransportData = new Api.GoodsData(100, 200, 300, 400, "description");
-            //    var transport = ApplicationActorsSystem.Instance.TransportActorLink;
-            //    var transportInfo = (Api.TransportData) await ApplicationActorsSystem.Instance.TransportActorInstance.Ask(getTransportData);
-            //    var result = await _deliveryService.DeliverGoodsAsync(msg, transportInfo);
-            //    Sender.Tell(result);
-            //    Sender.Tell(new DeliveryResult(TransportType.Plain,"ShipId", DateTime.Now, "address", true));
-            //});            
+          
             Receive<DeliveryGoods>( msg =>
             {
                 var path = @"C:\Temporary\FromPerfomaceTestResultDelivery.txt";
