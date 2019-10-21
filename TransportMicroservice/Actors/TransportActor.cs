@@ -14,13 +14,20 @@ namespace Actors
         private static int counter = 0;
         private Stopwatch Stopwatch = new Stopwatch();
         private static string path = @"C:\Temporary\FromPerfomaceTestResultTransport.txt";
+        private readonly ITransportService _service;
 
-        public TransportActor()
+        public TransportActor(ITransportService service)
         {
+            _service = service;
             Receive<GoodsData>(_ =>
             {
                 Stopwatch.Start();
                    counter++;
+                if (counter == 1)
+                {
+                    Console.WriteLine(Context.Self.Path);
+                    Console.WriteLine(Context.Dispatcher.Throughput);
+                }
                 if (counter % 10000 == 0)
                 {
                     Console.WriteLine(counter);
@@ -32,11 +39,15 @@ namespace Actors
                     using (var sw = new StreamWriter(path, true))
                     {
                         sw.WriteLine($"min:{Stopwatch.Elapsed.Minutes} s:{Stopwatch.Elapsed.Seconds} ms:{Stopwatch.Elapsed.Milliseconds} counter:{counter}");
-                        sw.WriteLine($"msg per sec:{counter/(Stopwatch.Elapsed.Minutes * 60 + Stopwatch.Elapsed.Seconds)}");
+                        sw.WriteLine($"msg/s:{counter/(Stopwatch.Elapsed.Minutes * 60 + Stopwatch.Elapsed.Seconds)}");
                     }
                 }
-
             }); 
+        }
+
+        public static Props Props(ITransportService transportService)
+        {
+            return Akka.Actor.Props.Create(() => new TransportActor(transportService));
         }
     }
 }

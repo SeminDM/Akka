@@ -15,7 +15,7 @@
   
   <ItemGroup>
     <Reference Include="Actors">
-      <HintPath>..\Web\bin\Debug\netcoreapp2.2\Actors.dll</HintPath>
+      <HintPath>..\..\TransportMicroservice\Actors\bin\Debug\netcoreapp2.2\Actors.dll</HintPath>
     </Reference>
     <Reference Include="Api">
       <HintPath>..\Web\bin\Debug\netcoreapp2.2\Api.dll</HintPath>

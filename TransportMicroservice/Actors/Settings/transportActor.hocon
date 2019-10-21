@@ -3,7 +3,7 @@
         provider = remote
 		my-dispatcher {
 		    type = Dispatcher
-		    throughput = 100
+		    throughput = 123
 		    throughput-deadline-time = 0ms
 		}
 		custom-mailbox {

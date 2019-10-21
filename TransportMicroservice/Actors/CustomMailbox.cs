@@ -13,7 +13,8 @@ namespace Actors
 
         protected override int PriorityGenerator(object message)
         {
-            
+            Console.WriteLine("Custom Mailbox");
+            return 0;
         }
     }
 }
